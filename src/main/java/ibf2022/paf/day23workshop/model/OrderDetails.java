@@ -67,7 +67,7 @@ public class OrderDetails {
 
     public static OrderDetails create(SqlRowSet rs) {
         OrderDetails orderDetails = new OrderDetails();
-        DateTimeFormatter dtf = DateTimeFormat.forPattern("dd/MM/yyyy");
+        DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd");
         DateTime orderDate = dtf.parseDateTime(rs.getString("order_date"));
         
         orderDetails.setId(rs.getInt("order_id"));
