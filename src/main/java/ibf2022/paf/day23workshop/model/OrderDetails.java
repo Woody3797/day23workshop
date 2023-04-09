@@ -1,8 +1,8 @@
 package ibf2022.paf.day23workshop.model;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import jakarta.json.Json;
@@ -11,7 +11,7 @@ import jakarta.json.JsonObject;
 public class OrderDetails {
     
     private int id;
-    private DateTime orderDate;
+    private LocalDate orderDate;
     private Integer customer_id;
     private Double totalDiscountedPrice;
     private Double costPrice;
@@ -19,8 +19,7 @@ public class OrderDetails {
     public OrderDetails() {
     }
 
-    public OrderDetails(int id, DateTime orderDate, Integer customer_id, Double totalDiscountedPrice,
-            Double costPrice) {
+    public OrderDetails(int id, LocalDate orderDate, Integer customer_id, Double totalDiscountedPrice, Double costPrice) {
         this.id = id;
         this.orderDate = orderDate;
         this.customer_id = customer_id;
@@ -34,10 +33,10 @@ public class OrderDetails {
     public void setId(int id) {
         this.id = id;
     }
-    public DateTime getOrderDate() {
+    public LocalDate getOrderDate() {
         return orderDate;
     }
-    public void setOrderDate(DateTime orderDate) {
+    public void setOrderDate(LocalDate orderDate) {
         this.orderDate = orderDate;
     }
     public Integer getCustomer_id() {
@@ -61,15 +60,13 @@ public class OrderDetails {
 
     @Override
     public String toString() {
-        return "OrderDetails [id=" + id + ", orderDate=" + orderDate + ", customer_id=" + customer_id
-                + ", totalDiscountedPrice=" + totalDiscountedPrice + ", costPrice=" + costPrice + "]";
+        return "OrderDetails [id=" + id + ", orderDate=" + orderDate + ", customer_id=" + customer_id + ", totalDiscountedPrice=" + totalDiscountedPrice + ", costPrice=" + costPrice + "]";
     }
 
     public static OrderDetails create(SqlRowSet rs) {
         OrderDetails orderDetails = new OrderDetails();
-        DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd");
-        DateTime orderDate = dtf.parseDateTime(rs.getString("order_date"));
-        
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate orderDate = LocalDate.parse(rs.getString("order_date"), dtf);
         orderDetails.setId(rs.getInt("order_id"));
         orderDetails.setOrderDate(orderDate);
         orderDetails.setCustomer_id(rs.getInt("customer_id"));
@@ -79,8 +76,7 @@ public class OrderDetails {
     }
 
     public JsonObject toJson() {
-        DateTimeFormatter dtf = DateTimeFormat.forPattern("dd-MM-yyyy");
-        String orderDate = getOrderDate().toString(dtf);
+        String orderDate = DateTimeFormatter.ofPattern("dd-MM-yyyy").format(getOrderDate());
 
         return Json.createObjectBuilder()
         .add("order_id", getId())
@@ -90,7 +86,5 @@ public class OrderDetails {
         .add("cost_price", getCostPrice())
         .build();
     }
-
-    
     
 }
