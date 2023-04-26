@@ -7,17 +7,25 @@
     <title>Order Details</title>
 </head>
 <body>
-    <h1>Search for order details</h1>
+    <h1>Search for order details 2</h1>
     <div>
-        <form action="@{/index2}">
+        <form action="">
             <label for="orderId">Order ID: </label>
             <input type="text" id="orderId" name="orderId">
             <button type="submit">Search</button>
             <br>
         </form>
     </div>
+    <br>
     <div th:if="${display} == true" th:object="${orderDetails}">
-        test
+        Order Id: <span th:text="*{id}"></span><br>
+        Customer Id: <span th:text="*{customer_id}">  </span><br>
+        Order Date: <span th:text="*{orderDate}">  </span><br>
+        Discounted Price: <span th:text="*{totalDiscountedPrice}">  </span><br>
+        Cost Price: <span th:text="*{costPrice}">  </span><br>
+    </div>
+    <div>
+        <span th:if="${error} == true">No order details found</span>
     </div>
 
 </body>
